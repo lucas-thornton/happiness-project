@@ -1,0 +1,55 @@
+Will need to import:
+
+  import matplotlib.pyplot as plt
+  import numpy as np
+  import pandas as pd
+  from sklearn.preprocessing import StandardScaler
+
+Country Breakdown
+
+Use KMeans Test to break down the countries into 3 group (developed, developing, underdeveloped)
+
+  from sklearn.cluster import KMeans
+
+  # Create a kmeans model using k = 12
+  kmeans = KMeans(n_clusters=3, random_state=0)
+  fit = kmeans.fit(scaled_data)
+  predicted_clusters = fit.predict(scaled_data)
+  
+  plt.scatter(scaled_data[:, 0], scaled_data[:, 1], c=predicted_clusters, s=50, cmap='viridis')
+  plt.show()
+
+Correlation Ranking
+
+Use the correlation ranking to identify which variables correlate best with the happiness score: 
+
+  corr = data.corr()
+  sort_data = data.sort_values(by='Happiness Score', ascending=False)
+  sort_data
+  
+  sort_data.to_csv('data.csv') **Found it easier to view output through csv file
+
+Random Forest by indicator type
+
+Once you've decided on the variables that you feel are relevant to include in the RF based on their correlation with the score move on to this code:
+
+  data = dataframe with chosen variables
+  happiness = dataframe with just happiness score
+
+  rf = RandomForestRegressor(n_estimators=200)
+  rf = rf.fit(data, happiness)
+  rf.score(data, happiness)
+
+  importances = rf.feature_importances_
+  importances
+
+  sorted(zip(rf.feature_importances_, data), reverse=True)
+
+Standardising the Data
+
+At some stage we'll need to standardise some of the data, may be best to do this before the RF stage. 
+Not sure how much impact the zero values are having on the correlations, to start with try changing them to NaN values so they don't effect the result.
+
+  scaler = StandardScaler()
+  # fit and transform the data
+  scaled_data = scaler.fit_transform(vars_clean) 
